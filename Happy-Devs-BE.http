@@ -1,0 +1,6 @@
+@Happy_Devs_BE_HostAddress = http://localhost:5253
+
+GET {{Happy_Devs_BE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
