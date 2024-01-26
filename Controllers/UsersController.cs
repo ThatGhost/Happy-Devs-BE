@@ -23,8 +23,8 @@ namespace Happy_Devs_BE.Controller
         }
 
         // Put: api/<UsersController>
-        [HttpPost]
-        public int put([FromBody] UserPut user)
+        [HttpPost()]
+        public int post([FromBody] UserPut user)
         {
             return _usersService.addUser(user);
         }

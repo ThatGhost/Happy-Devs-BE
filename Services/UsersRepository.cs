@@ -28,7 +28,7 @@ namespace Happy_Devs_BE.Services
 
         public int addUser(UserPut user)
         {
-            write($"INSERT INTO users (username, title, email, password) VALUES ('{user.UserName}', '{user.Title}', '{user.Email}', '{user.Password}');");
+            write($"INSERT INTO users (username, title, email, password) VALUES ('{user.UserName}', null, '{user.Email}', '{user.Password}');");
             return readOne<IdGet>($"SELECT id FROM users WHERE email = '{user.Email}';")!.id;
         }
 
