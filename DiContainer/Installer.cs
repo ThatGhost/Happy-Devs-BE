@@ -9,6 +9,7 @@ namespace Happy_Devs_BE.DiContainer
         {
             container.AddSingleton<ConnectionPool>();
             container.AddTransient<UsersRepository>();
+            container.AddTransient<UsersService>();
         }
     }
 }

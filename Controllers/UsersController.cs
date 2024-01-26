@@ -1,5 +1,5 @@
-﻿using Happy_Devs_BE.Services;
-using Happy_Devs_BE.Services.Core;
+﻿using Happy_Devs_BE.Controllers;
+using Happy_Devs_BE.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,16 +10,23 @@ namespace Happy_Devs_BE.Controller
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UsersRepository _usersRepository;
-        public UsersController(UsersRepository usersRepository) { 
-            _usersRepository = usersRepository;
+        private readonly UsersService _usersService;
+        public UsersController(UsersService usersService) { 
+            _usersService = usersService;
         }
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET: api/<UsersController>/@id
+        [HttpGet("{id}")]
+        public User Get(int id)
         {
-            return _usersRepository.getAllUsers();
+            return _usersService.getUser(id);
+        }
+
+        // Put: api/<UsersController>
+        [HttpPost]
+        public int put([FromBody] UserPut user)
+        {
+            return _usersService.addUser(user);
         }
     }
 }

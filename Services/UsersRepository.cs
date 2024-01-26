@@ -1,24 +1,42 @@
-﻿using Happy_Devs_BE.Services.Core;
-using MapDataReader;
+﻿using Dapper;
+
+using Happy_Devs_BE.Controllers;
+using Happy_Devs_BE.Services.Core;
 using Microsoft.Data.SqlClient;
 
 namespace Happy_Devs_BE.Services
 {
-    public class UsersRepository 
+    public class UsersRepository : BaseRepository
     {
-        private readonly ConnectionPool connectionPool;
-        public UsersRepository(ConnectionPool connectionPool)
+        public UsersRepository(ConnectionPool connectionPool) : base(connectionPool)
         {
-            this.connectionPool = connectionPool;
+
         }
 
-        public string[] getAllUsers()
+        public User getUser(int id)
         {
-            SqlConnection conn = connectionPool.getConnection();
-            var dataReader = new SqlCommand("select * from testTable;", conn).ExecuteReader();
-            List<IdAndName> users = dataReader.ToIdAndName();
+            UserGet? user = readOne<UserGet>($"select username, title, email from users where id = {id};");
+            if (user == null) throw new Exception();
 
-            return users.Select(u => u.name).ToArray();
+            return new User()
+            {
+                UserName = user.username,
+                Title = user.title,
+                Email = user.email,
+            };
+        }
+
+        public int addUser(UserPut user)
+        {
+            write($"INSERT INTO users (username, title, email, password) VALUES ('{user.UserName}', '{user.Title}', '{user.Email}', '{user.Password}');");
+            return readOne<IdGet>($"SELECT id FROM users WHERE email = '{user.Email}';")!.id;
+        }
+
+        private class UserGet
+        {
+            public string username { get; }
+            public string title { get; }
+            public string email { get; }
         }
     }
 }
