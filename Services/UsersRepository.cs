@@ -26,9 +26,25 @@ namespace Happy_Devs_BE.Services
             };
         }
 
+        public UserAuthData getUserAuthData(string email)
+        {
+            UserAuthData? userAuthData = readOne<UserAuthData>($"select password, id, email from users where email = '{email}'");
+            if (userAuthData == null) throw new Exception();
+
+            return userAuthData;
+        }
+
+        public UserAuthData getUserAuthData(int id)
+        {
+            UserAuthData? userAuthData = readOne<UserAuthData>($"select password, id, email from users where id = {id}");
+            if (userAuthData == null) throw new Exception();
+
+            return userAuthData;
+        }
+
         public int addUser(UserPut user)
         {
-            write($"INSERT INTO users (username, title, email, password) VALUES ('{user.UserName}', null, '{user.Email}', '{user.Password}');");
+            write($"INSERT INTO users (username, email, password) VALUES ('{user.UserName}', '{user.Email}', '{user.Password}');");
             return readOne<IdGet>($"SELECT id FROM users WHERE email = '{user.Email}';")!.id;
         }
 

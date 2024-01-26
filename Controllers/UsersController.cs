@@ -11,8 +11,10 @@ namespace Happy_Devs_BE.Controller
     public class UsersController : ControllerBase
     {
         private readonly UsersService _usersService;
-        public UsersController(UsersService usersService) { 
+        private readonly UsersAuthenticationService _usersAuthenticationService;
+        public UsersController(UsersService usersService, UsersAuthenticationService usersAuthenticationService) { 
             _usersService = usersService;
+            _usersAuthenticationService = usersAuthenticationService;
         }
 
         // GET: api/<UsersController>/@id
@@ -27,6 +29,16 @@ namespace Happy_Devs_BE.Controller
         public int post([FromBody] UserPut user)
         {
             return _usersService.addUser(user);
+        }
+
+        // Post: api/<UsersController>/login
+        [HttpPost("login")]
+        public LoginReponse login([FromBody] LoginRequest loginData)
+        {
+            return new LoginReponse()
+            {
+                token = _usersAuthenticationService.login(loginData.email, loginData.password)
+            };
         }
     }
 }
