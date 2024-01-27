@@ -15,7 +15,7 @@ namespace Happy_Devs_BE.Services
 
         public User getUser(int id)
         {
-            UserGet? user = readOne<UserGet>($"select username, title, email from users where id = {id};");
+            UserGetData? user = readOne<UserGetData>($"select username, title, email from users where id = {id};");
             if (user == null) throw new Exception();
 
             return new User()
@@ -26,20 +26,30 @@ namespace Happy_Devs_BE.Services
             };
         }
 
-        public UserAuthData getUserAuthData(string email)
+        public UserAuth getUserAuthData(string email)
         {
             UserAuthData? userAuthData = readOne<UserAuthData>($"select password, id, email from users where email = '{email}'");
             if (userAuthData == null) throw new Exception();
 
-            return userAuthData;
+            return convertToUserAuth(userAuthData);
         }
 
-        public UserAuthData getUserAuthData(int id)
+        public UserAuth getUserAuthData(int id)
         {
             UserAuthData? userAuthData = readOne<UserAuthData>($"select password, id, email from users where id = {id}");
             if (userAuthData == null) throw new Exception();
 
-            return userAuthData;
+            return convertToUserAuth(userAuthData);
+        }
+
+        private UserAuth convertToUserAuth(UserAuthData data)
+        {
+            return new UserAuth()
+            {
+                Email = data.email,
+                Password = data.password,
+                Id = data.id,
+            };
         }
 
         public int addUser(UserPut user)
@@ -48,11 +58,19 @@ namespace Happy_Devs_BE.Services
             return readOne<IdGet>($"SELECT id FROM users WHERE email = '{user.Email}';")!.id;
         }
 
-        private class UserGet
+        private class UserGetData
         {
             public string username { get; }
             public string title { get; }
             public string email { get; }
+        }
+
+        public class UserAuthData
+        {
+            public string email { get; set; }
+
+            public string password { get; set; }
+            public int id { get; set; }
         }
     }
 }

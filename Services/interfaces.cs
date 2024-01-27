@@ -1,17 +1,24 @@
 ﻿namespace Happy_Devs_BE.Services
 {
-    public class User
+    public struct User
     {
         public string UserName { get; set; }
         public string Title { get; set; }
         public string Email { get; set; }
     }
 
-    public class UserAuthData
+    public struct UserAuth
     {
-        public string email { get; set; }
+        public string Email { get; set; }
 
-        public string password { get; set; }
-        public int id { get; set; }
+        public string Password { get; set; }
+        public int Id { get; set; }
+    }
+
+    public struct Profile
+    {
+        public string UserName { get; set; }
+        public string Title { get; set; }
+        public string Bio { get; set; }
     }
 }

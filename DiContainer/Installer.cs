@@ -8,9 +8,13 @@ namespace Happy_Devs_BE.DiContainer
         public static void registerServices(IServiceCollection container)
         {
             container.AddSingleton<ConnectionPool>();
+
             container.AddTransient<UsersRepository>();
             container.AddTransient<UsersService>();
             container.AddTransient<UsersAuthenticationService>();
+            container.AddTransient<ProfileService>();
+            container.AddTransient<ProfileRepository>();
+            container.AddTransient<UsersAuthorazationService>();
         }
     }
 }
