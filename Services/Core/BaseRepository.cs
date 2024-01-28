@@ -12,26 +12,26 @@ namespace Happy_Devs_BE.Services.Core
             this.connectionPool = connectionPool;
         }
 
-        protected virtual List<T> read<T>(string query) where T : class
+        protected virtual List<T> read<T>(string query, object? parameters = null) where T : class
         {
             SqlConnection conn = connectionPool.getConnection();
-            List<T> data = conn.Query<T>(query).ToList();
+            List<T> data = conn.Query<T>(query, parameters).ToList();
             conn.Close();
             return data;
         }
 
-        protected virtual T? readOne<T>(string query) where T: class
+        protected virtual T? readOne<T>(string query, object? parameters = null) where T: class
         {
             SqlConnection conn = connectionPool.getConnection();
-            T data = conn.QueryFirst<T>(query);
+            T data = conn.QueryFirst<T>(query, parameters);
             conn.Close();
             return data;
         }
 
-        protected virtual void write(string query)
+        protected virtual void write(string query, object? parameters = null)
         {
             SqlConnection conn = connectionPool.getConnection();
-            conn.Query(query);
+            conn.Query(query, parameters);
             conn.Close();
         }
     }

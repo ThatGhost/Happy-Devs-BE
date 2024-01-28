@@ -1,5 +1,4 @@
 ﻿using Happy_Devs_BE.Services;
-
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -52,6 +51,23 @@ namespace Happy_Devs_BE.Controllers
                 Title = request.title,
                 Bio = request.bio,
             });
+        }
+
+        [HttpPut("{id}/pfp")]
+        public void putPfP(int id, IFormFile file)
+        {
+            _usersAuthenticationService.authenticateUser(Request.Headers);
+            _usersAuthorazationService.isUserRequestedUser(Request.Headers, id);
+
+            _profileService.uploadProfilePicture(id, file);
+        }
+
+        [HttpGet("{id}/pfp")]
+        public IActionResult? getPfP(int id)
+        {
+            byte[]? bytes = _profileService.getProfilePicture(id);
+            if (bytes == null) return null;
+            return File(bytes, "image/jpeg", "profilePicture");
         }
     }
 }

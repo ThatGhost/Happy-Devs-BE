@@ -24,7 +24,31 @@ namespace Happy_Devs_BE.Services
 
         public void updateProfile(int id, Profile profile)
         {
-            write($"update users set username = '{profile.UserName}', title = '{profile.Title}', bio = '{profile.Bio}' where id = {id};");
+            write($"update users set username = @username, title = @title, bio = @bio where id = {id};", new
+            {
+                username = profile.UserName,
+                bio = profile.Bio,
+                title = profile.Title,
+            });
+        }
+
+        public void uploadProfilePicture(int id, byte[] picture)
+        {
+            write($"update users set profilepicture = @pfp where id = {id}", new
+            {
+                pfp = picture,
+            });
+        }
+
+        public byte[]? getProfilePicture(int id)
+        {
+            byte[]? profileData = readOne<byte[]>($"select profilepicture from users where id = {id};");
+            return profileData;
+        }
+
+        private class ProfilePicture
+        {
+            public byte[]? picture;
         }
 
         private class ProfileData
