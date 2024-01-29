@@ -11,19 +11,19 @@ namespace Happy_Devs_BE.Services
             _usersRepository = usersRepository;
         }
 
-        public void authenticateUser(IHeaderDictionary headers)
+        public async Task authenticateUser(IHeaderDictionary headers)
         {
             const string authHeaderKey = "Authentication";
             if (!headers.ContainsKey(authHeaderKey)) throw new Exception("No authentication header found");
             string token = headers[authHeaderKey];
 
-            if (!compareLoginHash(token)) throw new Exception("Authentication failed");
+            if (!await compareLoginHash(token)) throw new Exception("Authentication failed");
         }
 
-        private bool compareLoginHash(string incomingToken)
+        private async Task<bool> compareLoginHash(string incomingToken)
         {
             int id = int.Parse(incomingToken.Substring(0, incomingToken.IndexOf(":")));
-            UserAuth userAuthData = _usersRepository.getUserAuthData(id);
+            UserAuth userAuthData = await _usersRepository.getUserAuthData(id);
 
             string correctUserAuthToken = GetHashString(userAuthData.Email + userAuthData.Password);
             string incomingUserAuthToken = incomingToken.Substring(incomingToken.IndexOf(':') + 1);
@@ -31,9 +31,9 @@ namespace Happy_Devs_BE.Services
             return correctUserAuthToken == incomingUserAuthToken;
         }
 
-        public string login(string email, string password)
+        public async Task<string> login(string email, string password)
         {
-            UserAuth userAuthData = _usersRepository.getUserAuthData(email);
+            UserAuth userAuthData = await _usersRepository.getUserAuthData(email);
             string newPasswordHash = GetHashString(password);
 
             if (newPasswordHash != userAuthData.Password) throw new Exception();

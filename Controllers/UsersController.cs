@@ -19,25 +19,25 @@ namespace Happy_Devs_BE.Controller
 
         // GET: api/<UsersController>/@id
         [HttpGet("{id}")]
-        public User Get(int id)
+        public async Task<User> Get(int id)
         {
-            return _usersService.getUser(id);
+            return await _usersService.getUser(id);
         }
 
         // Put: api/<UsersController>
         [HttpPost()]
-        public int post([FromBody] UserPut user)
+        public async Task<int> post([FromBody] UserPut user)
         {
-            return _usersService.addUser(user);
+            return await _usersService.addUser(user);
         }
 
         // Post: api/<UsersController>/login
         [HttpPost("login")]
-        public LoginReponse login([FromBody] LoginRequest loginData)
+        public async Task<LoginReponse> login([FromBody] LoginRequest loginData)
         {
             return new LoginReponse()
             {
-                token = _usersAuthenticationService.login(loginData.email, loginData.password)
+                token = await _usersAuthenticationService.login(loginData.email, loginData.password)
             };
         }
     }

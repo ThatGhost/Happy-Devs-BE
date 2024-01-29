@@ -26,11 +26,11 @@ namespace Happy_Devs_BE.Controllers
 
 
         [HttpGet("{id}")]
-        public ProfileResponse get(int id)
+        public async Task<ProfileResponse> get(int id)
         {
-            _usersAuthenticationService.authenticateUser(Request.Headers);
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
 
-            Profile profile = _profileService.GetProfile(id);
+            Profile profile = await _profileService.GetProfile(id);
             return new ProfileResponse
             {
                 title = profile.Title,
@@ -40,12 +40,12 @@ namespace Happy_Devs_BE.Controllers
         }
 
         [HttpPut("{id}")]
-        public void put(int id, [FromBody] ProfileRequest request)
+        public async Task put(int id, [FromBody] ProfileRequest request)
         {
-            _usersAuthenticationService.authenticateUser(Request.Headers);
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
             _usersAuthorazationService.isUserRequestedUser(Request.Headers, id);
 
-            _profileService.UpdateProfile(id, new Profile()
+            await _profileService.UpdateProfile(id, new Profile()
             {
                 UserName = request.username,
                 Title = request.title,
@@ -54,18 +54,18 @@ namespace Happy_Devs_BE.Controllers
         }
 
         [HttpPut("{id}/pfp")]
-        public void putPfP(int id, IFormFile file)
+        public async Task putPfP(int id, IFormFile file)
         {
-            _usersAuthenticationService.authenticateUser(Request.Headers);
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
             _usersAuthorazationService.isUserRequestedUser(Request.Headers, id);
 
-            _profileService.uploadProfilePicture(id, file);
+            await _profileService.uploadProfilePicture(id, file);
         }
 
         [HttpGet("{id}/pfp")]
-        public IActionResult? getPfP(int id)
+        public async Task<IActionResult?> getPfP(int id)
         {
-            byte[]? bytes = _profileService.getProfilePicture(id);
+            byte[]? bytes = await _profileService.getProfilePicture(id);
             if (bytes == null) return null;
             return File(bytes, "image/jpeg", "profilePicture");
         }

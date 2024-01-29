@@ -7,7 +7,7 @@ namespace Happy_Devs_BE.Services.Core
         private readonly ILogger<ConnectionPool> logger;
         private readonly IConfiguration config;
 
-        private List<SqlConnection> sqlConnections = new List<SqlConnection>();
+        private List<SqlPoolConnection> sqlConnections = new List<SqlPoolConnection>();
 
         public ConnectionPool(ILogger<ConnectionPool> logger, IConfiguration configuration)
         {
@@ -17,27 +17,47 @@ namespace Happy_Devs_BE.Services.Core
 
         public void start()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 10; i++)
             {
                 SqlConnection connection = new SqlConnection(config.GetConnectionString("DefaultConnection"));
-                sqlConnections.Add(connection);
+                sqlConnections.Add(new SqlPoolConnection()
+                {
+                    conn = connection,
+                    isOpen = false,
+                });
             }
             logger.LogInformation("started connections");
         }
 
-        public SqlConnection getConnection()
+        public async Task<SqlPoolConnection> getConnection()
         {
-            foreach (SqlConnection connection in sqlConnections)
+            for (int i = 0; i < sqlConnections.Count; i ++)
             {
-                if (connection.State == System.Data.ConnectionState.Open) continue;
-                connection.Open();
+                SqlPoolConnection connection = sqlConnections[i];
+                if (connection.isOpen) continue;
+                connection.isOpen = true;
+                await connection.conn.OpenAsync();
                 return connection;
             }
 
             SqlConnection newConnection = new SqlConnection(config.GetConnectionString("DefaultConnection"));
             newConnection.Open();
-            sqlConnections.Add(newConnection);
-            return newConnection;
+
+            SqlPoolConnection sqlPoolConnection = new SqlPoolConnection() { conn = newConnection, isOpen = true };
+            sqlConnections.Add(sqlPoolConnection);
+            return sqlPoolConnection;
+        }
+
+        public async Task closeConnection(SqlPoolConnection connection)
+        {
+            await connection.conn.CloseAsync();
+            connection.isOpen = false;
+        }
+
+        public struct SqlPoolConnection
+        {
+            public SqlConnection conn;
+            public bool isOpen;
         }
     }
 }

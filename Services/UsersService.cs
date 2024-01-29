@@ -20,16 +20,16 @@ namespace Happy_Devs_BE.Services
             _usersAuthenticationService = usersAuthenticationService;
         }
 
-        public int addUser(UserPut newUser)
+        public async Task<int> addUser(UserPut newUser)
         {
             newUser.Password = _usersAuthenticationService.GetHashString(newUser.Password);
 
-            return _usersRepository.addUser(newUser);
+            return await _usersRepository.addUser(newUser);
         }
 
-        public User getUser(int id)
+        public async Task<User> getUser(int id)
         {
-            return _usersRepository.getUser(id);
+            return await _usersRepository.getUser(id);
         }
     }
 }

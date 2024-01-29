@@ -4,14 +4,14 @@ namespace Happy_Devs_BE.Services
 {
     public class ProfileRepository : BaseRepository
     {
-        public ProfileRepository(ConnectionPool connectionPool) : base(connectionPool)
+        public ProfileRepository(IConfiguration config) : base(config)
         { 
         
         }
 
-        public Profile getProfile(int id)
+        public async Task<Profile> getProfile(int id)
         {
-            ProfileData? profileData = readOne<ProfileData>($"select username, title, bio from users where id = {id};");
+            ProfileData? profileData = await readOne<ProfileData>($"select username, title, bio from users where id = {id};");
             if (profileData == null) throw new Exception("Profile doesnt excist");
 
             return new Profile()
@@ -22,9 +22,9 @@ namespace Happy_Devs_BE.Services
             };
         }
 
-        public void updateProfile(int id, Profile profile)
+        public async Task updateProfile(int id, Profile profile)
         {
-            write($"update users set username = @username, title = @title, bio = @bio where id = {id};", new
+            await write($"update users set username = @username, title = @title, bio = @bio where id = {id};", new
             {
                 username = profile.UserName,
                 bio = profile.Bio,
@@ -32,17 +32,17 @@ namespace Happy_Devs_BE.Services
             });
         }
 
-        public void uploadProfilePicture(int id, byte[] picture)
+        public async Task uploadProfilePicture(int id, byte[] picture)
         {
-            write($"update users set profilepicture = @pfp where id = {id}", new
+            await write($"update users set profilepicture = @pfp where id = {id}", new
             {
                 pfp = picture,
             });
         }
 
-        public byte[]? getProfilePicture(int id)
+        public async Task<byte[]?> getProfilePicture(int id)
         {
-            byte[]? profileData = readOne<byte[]>($"select profilepicture from users where id = {id};");
+            byte[]? profileData = await readOne<byte[]>($"select profilepicture from users where id = {id};");
             return profileData;
         }
 

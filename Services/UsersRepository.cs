@@ -8,14 +8,14 @@ namespace Happy_Devs_BE.Services
 {
     public class UsersRepository : BaseRepository
     {
-        public UsersRepository(ConnectionPool connectionPool) : base(connectionPool)
+        public UsersRepository(IConfiguration config) : base(config)
         {
 
         }
 
-        public User getUser(int id)
+        public async Task<User> getUser(int id)
         {
-            UserGetData? user = readOne<UserGetData>($"select username, title, email from users where id = {id};");
+            UserGetData? user = await readOne<UserGetData>($"select username, title, email from users where id = {id};");
             if (user == null) throw new Exception();
 
             return new User()
@@ -26,17 +26,17 @@ namespace Happy_Devs_BE.Services
             };
         }
 
-        public UserAuth getUserAuthData(string email)
+        public async Task<UserAuth> getUserAuthData(string email)
         {
-            UserAuthData? userAuthData = readOne<UserAuthData>($"select password, id, email from users where email = '{email}'");
+            UserAuthData? userAuthData = await readOne<UserAuthData>($"select password, id, email from users where email = '{email}'");
             if (userAuthData == null) throw new Exception();
 
             return convertToUserAuth(userAuthData);
         }
 
-        public UserAuth getUserAuthData(int id)
+        public async Task<UserAuth> getUserAuthData(int id)
         {
-            UserAuthData? userAuthData = readOne<UserAuthData>($"select password, id, email from users where id = {id}");
+            UserAuthData? userAuthData = await readOne<UserAuthData>($"select password, id, email from users where id = {id}");
             if (userAuthData == null) throw new Exception();
 
             return convertToUserAuth(userAuthData);
@@ -52,10 +52,10 @@ namespace Happy_Devs_BE.Services
             };
         }
 
-        public int addUser(UserPut user)
+        public async Task<int> addUser(UserPut user)
         {
-            write($"INSERT INTO users (username, email, password) VALUES ('{user.UserName}', '{user.Email}', '{user.Password}');");
-            return readOne<IdGet>($"SELECT id FROM users WHERE email = '{user.Email}';")!.id;
+            await write($"INSERT INTO users (username, email, password) VALUES ('{user.UserName}', '{user.Email}', '{user.Password}');");
+            return (await readOne<IdGet>($"SELECT id FROM users WHERE email = '{user.Email}';"))!.id;
         }
 
         private class UserGetData

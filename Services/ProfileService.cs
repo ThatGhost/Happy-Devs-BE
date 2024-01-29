@@ -9,17 +9,17 @@ namespace Happy_Devs_BE.Services
             _profileRepository = profileRepository;
         }
 
-        public Profile GetProfile(int id)
+        public async Task<Profile> GetProfile(int id)
         {
-            return _profileRepository.getProfile(id);
+            return await _profileRepository.getProfile(id);
         }
 
-        public void UpdateProfile(int id, Profile profile)
+        public async Task UpdateProfile(int id, Profile profile)
         {
-            _profileRepository.updateProfile(id, profile);
+            await _profileRepository.updateProfile(id, profile);
         }
 
-        public void uploadProfilePicture(int id, IFormFile file)
+        public async Task uploadProfilePicture(int id, IFormFile file)
         {
             byte[] imageData;
             using (var stream = new MemoryStream())
@@ -27,12 +27,12 @@ namespace Happy_Devs_BE.Services
                 file.CopyTo(stream);
                 imageData = stream.ToArray();
             }
-            _profileRepository.uploadProfilePicture(id, imageData);
+            await _profileRepository.uploadProfilePicture(id, imageData);
         }
 
-        public byte[]? getProfilePicture(int id)
+        public async Task<byte[]?> getProfilePicture(int id)
         {
-            return _profileRepository.getProfilePicture(id);
+            return await _profileRepository.getProfilePicture(id);
         }
     }
 }
