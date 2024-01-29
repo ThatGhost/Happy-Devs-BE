@@ -65,6 +65,8 @@ namespace Happy_Devs_BE.Controllers
         [HttpGet("{id}/pfp")]
         public async Task<IActionResult?> getPfP(int id)
         {
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
+
             byte[]? bytes = await _profileService.getProfilePicture(id);
             if (bytes == null) return null;
             return File(bytes, "image/jpeg", "profilePicture");

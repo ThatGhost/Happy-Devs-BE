@@ -15,6 +15,8 @@ namespace Happy_Devs_BE.DiContainer
             container.AddTransient<ProfileService>();
             container.AddTransient<ProfileRepository>();
             container.AddTransient<UsersAuthorazationService>();
+            container.AddTransient<ActivityService>();
+            container.AddTransient<ActivityRepository>();
         }
     }
 }

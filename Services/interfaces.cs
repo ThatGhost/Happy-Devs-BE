@@ -21,4 +21,19 @@
         public string? Title { get; set; }
         public string? Bio { get; set; }
     }
+
+    public struct Activiy
+    {
+        public ActivityType Type { get; set; }
+        public DateTime At { get; set; }
+    }
+
+    public enum ActivityType
+    {
+        UpdatedProfile = 0,
+        MadePost = 1,
+        AskedQuestion = 2,
+        AwnseredQuestion = 3,
+        UpdatedDocumentation = 4,
+    }
 }

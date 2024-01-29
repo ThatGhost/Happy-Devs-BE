@@ -4,9 +4,14 @@ namespace Happy_Devs_BE.Services
     public class ProfileService
     {
         private readonly ProfileRepository _profileRepository;
-        public ProfileService(ProfileRepository profileRepository) 
+        private readonly ActivityService _activityService;
+        public ProfileService(
+            ProfileRepository profileRepository,
+            ActivityService activityService
+        ) 
         {
             _profileRepository = profileRepository;
+            _activityService = activityService;
         }
 
         public async Task<Profile> GetProfile(int id)
@@ -17,6 +22,7 @@ namespace Happy_Devs_BE.Services
         public async Task UpdateProfile(int id, Profile profile)
         {
             await _profileRepository.updateProfile(id, profile);
+            await _activityService.addActivity(id, ActivityType.UpdatedProfile);
         }
 
         public async Task uploadProfilePicture(int id, IFormFile file)
