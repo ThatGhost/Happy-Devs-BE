@@ -9,10 +9,11 @@ namespace Happy_Devs_BE.Services
         
         }
 
-        public async Task<List<Activiy>> getAllActivity(int userId)
+        public async Task<List<Activiy>> getAllActivity(int userId, DateTime minDate)
         {
-            List<ActivityData> activityData = await read<ActivityData>("select type, at from activity where userId = @id;", new {
-                id = userId
+            List<ActivityData> activityData = await read<ActivityData>("select type, at from activity where userId = @id AND at > @mindate;", new {
+                id = userId,
+                mindate = minDate
             });
 
             return activityData.Select(activityData => new Activiy

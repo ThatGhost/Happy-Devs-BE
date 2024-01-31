@@ -10,7 +10,9 @@
 
         public async Task<List<Activiy>> getAllActivity(int userId)
         {
-            return await _activityRepository.getAllActivity(userId);
+            DateTime minDate = DateTime.Now.AddDays(-7);
+
+            return await _activityRepository.getAllActivity(userId, minDate);
         }
 
         public async Task addActivity(int userId, ActivityType type)
