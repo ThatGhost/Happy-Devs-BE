@@ -46,6 +46,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Run something here
-app.Services.GetService<ConnectionPool>()?.start();
 
 app.Run();

@@ -1,5 +1,6 @@
 ﻿using Happy_Devs_BE.Services;
 using Happy_Devs_BE.Services.Core;
+using Happy_Devs_BE.Services.Posts;
 
 namespace Happy_Devs_BE.DiContainer
 {
@@ -7,8 +8,6 @@ namespace Happy_Devs_BE.DiContainer
     {
         public static void registerServices(IServiceCollection container)
         {
-            container.AddSingleton<ConnectionPool>();
-
             container.AddTransient<UsersRepository>();
             container.AddTransient<UsersService>();
             container.AddTransient<UsersAuthenticationService>();
@@ -17,6 +16,8 @@ namespace Happy_Devs_BE.DiContainer
             container.AddTransient<UsersAuthorazationService>();
             container.AddTransient<ActivityService>();
             container.AddTransient<ActivityRepository>();
+            container.AddTransient<PostsService>();
+            container.AddTransient<PostsRepository>();
         }
     }
 }
