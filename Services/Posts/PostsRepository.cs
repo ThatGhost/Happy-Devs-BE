@@ -25,5 +25,37 @@ namespace Happy_Devs_BE.Services.Posts
             if (newId == null) throw new Exception("post not created");
             return newId.id;
         }
+
+        public async Task<Post[]> getRecentPosts(int limit = int.MaxValue)
+        {
+            List<PostData> postsData = await read<PostData>(@$"
+                    select top {limit} id, userId, title, post, at 
+                    from posts 
+                    order by at desc;");
+
+            return postsData.Select(x => toPost(x)).ToArray();
+        }
+
+        private Post toPost(PostData data)
+        {
+            return new Post()
+            {
+                Id = data.id,
+                UserId = data.userId,
+                Title = data.title,
+                Content = data.content,
+                At = data.at,
+            };
+        }
+
+        private class PostData
+        {
+            public int id { get; set; }
+            public int userId { get; set; }
+            public string title { get; set; }
+            public string content { get; set; }
+            public DateTime at { get; set; }
+        }
+
     }
 }

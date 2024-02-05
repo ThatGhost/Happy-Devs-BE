@@ -5,4 +5,13 @@
         public string title { get; set; }
         public string content { get; set; } 
     }
+
+    public struct PostResponse
+    {
+        public int id { get; set; }
+        public int userId { get; set; }
+        public string title { get; set; }
+        public string content { get; set; }
+        public DateTime at { get; set; }
+    }
 }

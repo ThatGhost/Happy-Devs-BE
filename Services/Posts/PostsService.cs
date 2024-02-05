@@ -12,5 +12,11 @@
         {
             return await _postsRepository.createPost(userId, title, content, DateTime.UtcNow);
         }
+
+        public async Task<Post[]> getRecentPosts()
+        {
+            int limit = 10;
+            return await _postsRepository.getRecentPosts(limit);
+        }
     }
 }

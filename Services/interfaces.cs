@@ -28,6 +28,15 @@
         public DateTime At { get; set; }
     }
 
+    public struct Post
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public DateTime At { get; set; }
+    }
+
     public enum ActivityType
     {
         UpdatedProfile = 0,

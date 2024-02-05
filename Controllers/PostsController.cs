@@ -30,5 +30,25 @@ namespace Happy_Devs_BE.Controllers
             _usersAuthorazationService.isUserRequestedUser(Request.Headers, id);
             return await _postsService.createPost(id, request.title, request.content);
         }
+
+        [HttpGet("recent")]
+        public async Task<PostResponse[]> GetRecent()
+        {
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
+            Post[] posts = await _postsService.getRecentPosts();
+            return posts.Select(p => toPostResponse(p)).ToArray();
+        }
+
+        private PostResponse toPostResponse(Post post)
+        {
+            return new PostResponse()
+            {
+                id = post.Id,
+                userId = post.UserId,
+                title = post.Title,
+                content = post.Content,
+                at = post.At
+            };
+        }
     }
 }
