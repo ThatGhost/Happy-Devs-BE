@@ -17,6 +17,7 @@
 
     public struct Profile
     {
+        public int Id { get; set; }
         public string UserName { get; set; }
         public string? Title { get; set; }
         public string? Bio { get; set; }

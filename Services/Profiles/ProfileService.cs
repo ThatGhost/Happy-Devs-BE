@@ -19,6 +19,12 @@ namespace Happy_Devs_BE.Services
             return await _profileRepository.getProfile(id);
         }
 
+        public async Task<List<Profile>> GetProfiles(int[] ids)
+        {
+            ids = ids.Distinct().ToArray();
+            return await _profileRepository.getProfiles(ids);
+        }
+
         public async Task UpdateProfile(int id, Profile profile)
         {
             await _profileRepository.updateProfile(id, profile);

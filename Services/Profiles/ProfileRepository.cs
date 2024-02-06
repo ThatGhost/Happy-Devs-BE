@@ -11,14 +11,30 @@ namespace Happy_Devs_BE.Services
 
         public async Task<Profile> getProfile(int id)
         {
-            ProfileData? profileData = await readOne<ProfileData>($"select username, title, bio from users where id = {id};");
-            if (profileData == null) throw new Exception("Profile doesnt excist");
+            List<Profile> profiles = await getProfiles(new int[] {id});
+            if (profiles.Count == 0) throw new Exception("Profile does not excist");
 
+            return profiles[0];
+        }
+
+        public async Task<List<Profile>> getProfiles(int[] ids)
+        {
+            List<ProfileData> profileData = await read<ProfileData>($"select id, username, title, bio from users where id in (@ids);", new
+            {
+                ids = ids
+            });
+
+            return profileData.Select(toProfile).ToList();
+        }
+
+        private Profile toProfile(ProfileData profileData)
+        {
             return new Profile()
             {
                 UserName = profileData.username,
                 Title = profileData.title,
                 Bio = profileData.bio,
+                Id = profileData.id,
             };
         }
 
@@ -53,6 +69,7 @@ namespace Happy_Devs_BE.Services
 
         private class ProfileData
         {
+            public int id { get; set; }
             public string username { get; set; }
             public string? title { get; set; }
             public string? bio { get; set; }

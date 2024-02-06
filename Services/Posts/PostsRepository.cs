@@ -8,7 +8,7 @@ namespace Happy_Devs_BE.Services.Posts
 
         public async Task<int> createPost(int userId, string title, string content, DateTime at)
         {
-            await write(@"insert into posts (userId, title, post, at) values (@userId,@title,@content,@at);",
+            await write(@"insert into posts (userId, title, content, at) values (@userId,@title,@content,@at);",
                 new
                 {
                     userId = userId,
@@ -29,7 +29,7 @@ namespace Happy_Devs_BE.Services.Posts
         public async Task<Post[]> getRecentPosts(int limit = int.MaxValue)
         {
             List<PostData> postsData = await read<PostData>(@$"
-                    select top {limit} id, userId, title, post, at 
+                    select top {limit} id, userId, title, at, content
                     from posts 
                     order by at desc;");
 

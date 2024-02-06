@@ -39,6 +39,26 @@ namespace Happy_Devs_BE.Controllers
             };
         }
 
+        [HttpPost("list")]
+        public async Task<List<ProfileResponse>> get([FromBody]int[] ids)
+        {
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
+
+            List<Profile> profiles = await _profileService.GetProfiles(ids);
+            return profiles.Select(toProfileResponse).ToList();
+        }
+
+        private ProfileResponse toProfileResponse(Profile profile )
+        {
+            return new ProfileResponse
+            {
+                title = profile.Title,
+                bio = profile.Bio,
+                username = profile.UserName,
+                id = profile.Id,
+            };
+        }
+
         [HttpPut("{id}")]
         public async Task put(int id, [FromBody] ProfileRequest request)
         {

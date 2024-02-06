@@ -32,11 +32,11 @@ namespace Happy_Devs_BE.Controllers
         }
 
         [HttpGet("recent")]
-        public async Task<PostResponse[]> GetRecent()
+        public async Task<List<PostResponse>> GetRecent()
         {
             await _usersAuthenticationService.authenticateUser(Request.Headers);
             Post[] posts = await _postsService.getRecentPosts();
-            return posts.Select(p => toPostResponse(p)).ToArray();
+            return posts.Select(p => toPostResponse(p)).ToList();
         }
 
         private PostResponse toPostResponse(Post post)

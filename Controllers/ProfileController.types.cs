@@ -2,6 +2,7 @@
 {
     public struct ProfileResponse
     {
+        public int id {  get; set; }
         public string? bio { get; set; }
         public string username { get; set; }
         public string? title { get; set; }
