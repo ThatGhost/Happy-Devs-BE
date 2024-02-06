@@ -3,13 +3,19 @@
     public class PostsService
     {
         private readonly PostsRepository _postsRepository;
-        public PostsService(PostsRepository postsRepository)
+        private readonly ActivityService _activityService;
+        public PostsService(
+            PostsRepository postsRepository,
+            ActivityService activityService
+        )
         { 
             _postsRepository = postsRepository;
+            _activityService = activityService;
         }
 
         public async Task<int> createPost(int userId, string title, string content)
         {
+            await _activityService.addActivity(userId, ActivityType.MadePost);
             return await _postsRepository.createPost(userId, title, content, DateTime.UtcNow);
         }
 
