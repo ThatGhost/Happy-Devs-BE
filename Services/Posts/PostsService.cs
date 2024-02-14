@@ -24,5 +24,10 @@
             int limit = 10;
             return await _postsRepository.getRecentPosts(limit);
         }
+
+        public async Task<Post> getPost(int id)
+        {
+            return await _postsRepository.getPost(id);
+        }
     }
 }

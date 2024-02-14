@@ -36,6 +36,18 @@ namespace Happy_Devs_BE.Services.Posts
             return postsData.Select(x => toPost(x)).ToArray();
         }
 
+        public async Task<Post> getPost(int id)
+        {
+            PostData? postsData = await readOne<PostData>(@$"
+                    select id, userId, title, at, content
+                    from posts 
+                    WHERE id = {id}");
+
+            if (postsData == null) throw new Exception("post not found");
+
+            return toPost(postsData);
+        }
+
         private Post toPost(PostData data)
         {
             return new Post()

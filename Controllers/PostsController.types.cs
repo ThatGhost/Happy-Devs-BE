@@ -14,4 +14,13 @@
         public string content { get; set; }
         public DateTime at { get; set; }
     }
+
+    public struct PostResponseMinimal
+    {
+        public int id { get; set; }
+        public int userId { get; set; }
+        public string title { get; set; }
+        public DateTime at { get; set; }
+    }
+
 }

@@ -32,11 +32,19 @@ namespace Happy_Devs_BE.Controllers
         }
 
         [HttpGet("recent")]
-        public async Task<List<PostResponse>> GetRecent()
+        public async Task<List<PostResponseMinimal>> GetRecent()
         {
             await _usersAuthenticationService.authenticateUser(Request.Headers);
             Post[] posts = await _postsService.getRecentPosts();
-            return posts.Select(p => toPostResponse(p)).ToList();
+            return posts.Select(p => toPostMinimalResponse(p)).ToList();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<PostResponse> Get(int id)
+        {
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
+            Post posts = await _postsService.getPost(id);
+            return toPostResponse(posts);
         }
 
         private PostResponse toPostResponse(Post post)
@@ -46,7 +54,18 @@ namespace Happy_Devs_BE.Controllers
                 id = post.Id,
                 userId = post.UserId,
                 title = post.Title,
+                at = post.At,
                 content = post.Content,
+            };
+        }
+
+        private PostResponseMinimal toPostMinimalResponse(Post post)
+        {
+            return new PostResponseMinimal()
+            {
+                id = post.Id,
+                userId = post.UserId,
+                title = post.Title,
                 at = post.At
             };
         }
