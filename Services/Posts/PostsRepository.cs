@@ -64,7 +64,7 @@ namespace Happy_Devs_BE.Services.Posts
                 Title = data.title,
                 Content = data.content,
                 At = data.at,
-                postComments = comments
+                Comments = comments
             };
         }
 
