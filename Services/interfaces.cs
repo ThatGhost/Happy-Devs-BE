@@ -29,6 +29,14 @@
         public DateTime At { get; set; }
     }
 
+    public struct PostMinimal
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string Title { get; set; }
+        public DateTime At { get; set; }
+    }
+
     public struct Post
     {
         public int Id { get; set; }
@@ -36,7 +44,17 @@
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime At { get; set; }
+        public List<PostComment> Comments { get; set; }
     }
+
+    public struct PostComment
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string Content { get; set; }
+        public DateTime At { get; set; }
+    }
+
 
     public enum ActivityType
     {

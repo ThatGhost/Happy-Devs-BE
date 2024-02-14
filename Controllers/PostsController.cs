@@ -1,4 +1,6 @@
-﻿using Happy_Devs_BE.Services;
+﻿using Dapper;
+
+using Happy_Devs_BE.Services;
 using Happy_Devs_BE.Services.Posts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +37,7 @@ namespace Happy_Devs_BE.Controllers
         public async Task<List<PostResponseMinimal>> GetRecent()
         {
             await _usersAuthenticationService.authenticateUser(Request.Headers);
-            Post[] posts = await _postsService.getRecentPosts();
+            PostMinimal[] posts = await _postsService.getRecentPosts();
             return posts.Select(p => toPostMinimalResponse(p)).ToList();
         }
 
@@ -56,10 +58,17 @@ namespace Happy_Devs_BE.Controllers
                 title = post.Title,
                 at = post.At,
                 content = post.Content,
+                comments = post.Comments.Select(c => new CommentResponse()
+                {
+                    id = c.Id,
+                    userId = c.UserId,
+                    content = c.Content,
+                    at = c.At,
+                }).AsList()
             };
         }
 
-        private PostResponseMinimal toPostMinimalResponse(Post post)
+        private PostResponseMinimal toPostMinimalResponse(PostMinimal post)
         {
             return new PostResponseMinimal()
             {

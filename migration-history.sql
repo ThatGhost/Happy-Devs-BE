@@ -42,3 +42,13 @@ create table posts (
 	at DATETIME NOT NULL
 	foreign key (userId) references users(id)
 );
+
+create table post_comments (
+	id int IDENTITY(1,1) PRIMARY KEY,
+	postId int NOT NULL,
+	userId int NOT NULL,
+	content varchar(2000) NOT NULL DEFAULT '',
+	at DATETIME NOT NULL
+	foreign key (userId) references users(id),
+	foreign key (postId) references posts(id)
+);

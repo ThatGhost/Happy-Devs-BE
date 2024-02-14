@@ -26,14 +26,14 @@ namespace Happy_Devs_BE.Services.Posts
             return newId.id;
         }
 
-        public async Task<Post[]> getRecentPosts(int limit = int.MaxValue)
+        public async Task<PostMinimal[]> getRecentPosts(int limit = int.MaxValue)
         {
             List<PostData> postsData = await read<PostData>(@$"
                     select top {limit} id, userId, title, at, content
                     from posts 
                     order by at desc;");
 
-            return postsData.Select(x => toPost(x)).ToArray();
+            return postsData.Select(x => toPostMinimal(x)).ToArray();
         }
 
         public async Task<Post> getPost(int id)
@@ -44,11 +44,18 @@ namespace Happy_Devs_BE.Services.Posts
                     WHERE id = {id}");
 
             if (postsData == null) throw new Exception("post not found");
+            List<PostComment> comments = await getPostComments(id);
 
-            return toPost(postsData);
+            return toPost(postsData, comments);
         }
 
-        private Post toPost(PostData data)
+        public async Task<List<PostComment>> getPostComments(int postId)
+        {
+            List<PostCommentData> postComments = await read<PostCommentData>($"select id, userId, content, at from post_comments where postId = {postId};");
+            return postComments.Select(x => toPostComment(x)).ToList();
+        }
+
+        private Post toPost(PostData data, List<PostComment> comments)
         {
             return new Post()
             {
@@ -57,8 +64,32 @@ namespace Happy_Devs_BE.Services.Posts
                 Title = data.title,
                 Content = data.content,
                 At = data.at,
+                postComments = comments
             };
         }
+
+        private PostMinimal toPostMinimal(PostData data)
+        {
+            return new PostMinimal()
+            {
+                Id = data.id,
+                UserId = data.userId,
+                Title = data.title,
+                At = data.at,
+            };
+        }
+
+        private PostComment toPostComment(PostCommentData data)
+        {
+            return new PostComment()
+            {
+                Id = data.id,
+                UserId = data.userId,
+                Content = data.content,
+                At = data.at,
+            };
+        }
+
 
         private class PostData
         {
@@ -69,5 +100,12 @@ namespace Happy_Devs_BE.Services.Posts
             public DateTime at { get; set; }
         }
 
+        private class PostCommentData
+        {
+            public int id { get; set; }
+            public int userId { get; set; }
+            public string content { get; set; }
+            public DateTime at { get; set; }
+        }
     }
 }
