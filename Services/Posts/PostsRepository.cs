@@ -26,6 +26,18 @@ namespace Happy_Devs_BE.Services.Posts
             return newId.id;
         }
 
+        public async Task commentOnPost(int userId, int postId, string content, DateTime at)
+        {
+            await write(@"insert into post_comments (userId, postId, content, at) values (@userId,@postId,@content,@at);",
+                new
+                {
+                    userId = userId,
+                    postId = postId,
+                    content = content,
+                    at = at
+                });
+        }
+
         public async Task<PostMinimal[]> getRecentPosts(int limit = int.MaxValue)
         {
             List<PostData> postsData = await read<PostData>(@$"

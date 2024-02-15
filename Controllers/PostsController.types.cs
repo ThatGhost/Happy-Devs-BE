@@ -6,6 +6,12 @@
         public string content { get; set; } 
     }
 
+    public struct CommentRequest
+    {
+        public int postId { get; set; }
+        public string content { get; set; }
+    }
+
     public struct PostResponse
     {
         public int id { get; set; }

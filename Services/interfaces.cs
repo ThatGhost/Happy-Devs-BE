@@ -60,8 +60,9 @@
     {
         UpdatedProfile = 0,
         MadePost = 1,
-        AskedQuestion = 2,
-        AwnseredQuestion = 3,
-        UpdatedDocumentation = 4,
+        CommentedOnPost = 2,
+        AskedQuestion = 3,
+        AwnseredQuestion = 4,
+        UpdatedDocumentation = 5,
     }
 }

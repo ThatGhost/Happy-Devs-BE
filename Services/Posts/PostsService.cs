@@ -19,6 +19,12 @@
             return await _postsRepository.createPost(userId, title, content, DateTime.UtcNow);
         }
 
+        public async Task createComment(int userId, int postId, string content)
+        {
+            await _activityService.addActivity(userId, ActivityType.CommentedOnPost);
+            await _postsRepository.commentOnPost(userId, postId, content, DateTime.UtcNow);
+        }
+
         public async Task<PostMinimal[]> getRecentPosts()
         {
             int limit = 10;

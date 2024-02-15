@@ -33,6 +33,14 @@ namespace Happy_Devs_BE.Controllers
             return await _postsService.createPost(id, request.title, request.content);
         }
 
+        [HttpPut("comment/{id}")]
+        public async Task PutComment(int id, [FromBody] CommentRequest request)
+        {
+            await _usersAuthenticationService.authenticateUser(Request.Headers);
+            _usersAuthorazationService.isUserRequestedUser(Request.Headers, id);
+            await _postsService.createComment(id, request.postId, request.content);
+        }
+
         [HttpGet("recent")]
         public async Task<List<PostResponseMinimal>> GetRecent()
         {
