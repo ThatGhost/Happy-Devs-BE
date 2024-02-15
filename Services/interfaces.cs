@@ -55,7 +55,6 @@
         public DateTime At { get; set; }
     }
 
-
     public enum ActivityType
     {
         UpdatedProfile = 0,
@@ -65,4 +64,22 @@
         AwnseredQuestion = 4,
         UpdatedDocumentation = 5,
     }
+
+    public struct CodeFolder
+    {
+        public int Id { get; set; }
+        public int? folderId { get; set; }
+        public string title { get; set; }
+        public DateTime At { get; set; }
+    }
+
+    public struct CodeFile
+    {
+        public int Id { get; set; }
+        public int? folderId { get; set; }
+        public string title { get; set; }
+        public string content { get; set; }
+        public DateTime At { get; set; }
+    }
+
 }

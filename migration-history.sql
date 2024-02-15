@@ -52,3 +52,19 @@ create table post_comments (
 	foreign key (userId) references users(id),
 	foreign key (postId) references posts(id)
 );
+
+create table folders (
+	id int IDENTITY(1,1) PRIMARY KEY,
+	at DATETIME NOT NULL,
+	title varchar(128),
+	folderId int NULL
+);
+
+create table files (
+	id int IDENTITY(1,1) PRIMARY KEY,
+	folderId int NOT NULL,
+	at DATETIME NOT NULL,
+	title varchar(128),
+	content varchar(MAX)
+	foreign key (folderId) references folders(id)
+);
