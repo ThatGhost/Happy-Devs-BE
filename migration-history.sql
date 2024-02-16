@@ -68,3 +68,5 @@ create table files (
 	content varchar(MAX)
 	foreign key (folderId) references folders(id)
 );
+
+insert into folders (at, title, folderId) values (CURRENT_TIMESTAMP, 'ROOT', null);

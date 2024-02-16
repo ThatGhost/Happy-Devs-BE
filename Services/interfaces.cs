@@ -68,17 +68,19 @@
     public struct CodeFolder
     {
         public int Id { get; set; }
-        public int? folderId { get; set; }
-        public string title { get; set; }
+        public int? FolderId { get; set; }
+        public string Title { get; set; }
         public DateTime At { get; set; }
+        public List<CodeFile> Files { get; set; }
+        public List<CodeFolder> Folders { get; set; }
     }
 
     public struct CodeFile
     {
         public int Id { get; set; }
-        public int? folderId { get; set; }
-        public string title { get; set; }
-        public string content { get; set; }
+        public int FolderId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
         public DateTime At { get; set; }
     }
 

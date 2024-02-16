@@ -18,6 +18,9 @@ namespace Happy_Devs_BE.DiContainer
             container.AddTransient<ActivityRepository>();
             container.AddTransient<PostsService>();
             container.AddTransient<PostsRepository>();
+            container.AddTransient<CodeService>();
+            container.AddTransient<CodeRepository>();
+            container.AddTransient<CodeStructureComposer>();
         }
     }
 }
