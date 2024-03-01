@@ -39,11 +39,11 @@ namespace Happy_Devs_BE.Controllers
             return await _codeService.AddFolder(request.title, request.folderId);
         }
 
-        [HttpGet("folder")]
-        public async Task getFolder()
+        [HttpGet("file/{id}")]
+        public async Task<FileResponse> getFile(int id)
         {
             await _usersAuthenticationService.authenticateUser(Request.Headers);
-
+            return toFileResponse(await _codeService.GetFile(id));
         }
 
         [HttpGet("root")]
@@ -70,7 +70,7 @@ namespace Happy_Devs_BE.Controllers
         private FolderResponse toFolderResponse(CodeFolder folder)
         {
             List<FolderResponse> folders = folder.Folders.Select(toFolderResponse).ToList();
-            List<FileResponse> files = folder.Files.Select(toFileResponse).ToList();
+            List<MinimalFileResponse> files = folder.Files.Select(toMinimalFileResponse).ToList();
 
             return new FolderResponse()
             {
@@ -89,6 +89,17 @@ namespace Happy_Devs_BE.Controllers
                 at = file.At,
                 title = file.Title,
                 content = file.Content,
+                fileId = file.Id,
+                folderId = file.FolderId,
+            };
+        }
+
+        private MinimalFileResponse toMinimalFileResponse(CodeFile file)
+        {
+            return new MinimalFileResponse()
+            {
+                at = file.At,
+                title = file.Title,
                 fileId = file.Id,
                 folderId = file.FolderId,
             };

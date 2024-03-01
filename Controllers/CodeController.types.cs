@@ -30,12 +30,20 @@
         public DateTime at { get; set; }
     }
 
+    public struct MinimalFileResponse
+    {
+        public int folderId { get; set; }
+        public string title { get; set; }
+        public int fileId { get; set; }
+        public DateTime at { get; set; }
+    }
+
     public struct FolderResponse
     {
         public int folderId { get; set; }
         public string title { get; set; }
         public DateTime at { get; set; }
-        public List<FileResponse> files { get; set; }
+        public List<MinimalFileResponse> files { get; set; }
         public List<FolderResponse> folders { get; set; }
     }
 

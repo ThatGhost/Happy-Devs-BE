@@ -44,7 +44,7 @@ namespace Happy_Devs_BE.Services.Posts
                     select top {limit} id, userId, title, at, content
                     from posts 
                     order by at desc;");
-
+            if (postsData.Count == 0) return [];
             return postsData.Select(x => toPostMinimal(x)).ToArray();
         }
 

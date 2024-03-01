@@ -46,7 +46,8 @@ namespace Happy_Devs_BE.Controllers
         {
             await _usersAuthenticationService.authenticateUser(Request.Headers);
             PostMinimal[] posts = await _postsService.getRecentPosts();
-            return posts.Select(p => toPostMinimalResponse(p)).ToList();
+            if(posts.Length == 0) return new List<PostResponseMinimal>();
+            return posts.Select(toPostMinimalResponse).ToList();
         }
 
         [HttpGet("{id}")]

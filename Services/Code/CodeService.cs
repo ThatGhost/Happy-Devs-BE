@@ -79,5 +79,10 @@
         {
             await _codeRepository.DeleteFiles(new List<int>() { fileId });
         }
+
+        public async Task<CodeFile> GetFile(int fileId)
+        {
+            return await _codeRepository.getFile(fileId);
+        }
     }
 }

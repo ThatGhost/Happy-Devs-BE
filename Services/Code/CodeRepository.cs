@@ -27,8 +27,15 @@ namespace Happy_Devs_BE.Services
 
         public async Task<List<CodeFile>> getAllFiles()
         {
-            List<CodeFileData> folderData = await read<CodeFileData>("select id, at, title, folderId, content from files");
-            return folderData.Select(toCodeFile).ToList();
+            List<CodeFileData> files = await read<CodeFileData>("select id, at, title, folderId, content from files");
+            return files.Select(toCodeFile).ToList();
+        }
+
+        public async Task<CodeFile> getFile(int id)
+        {
+            CodeFileData? fileData = await readOne<CodeFileData>("select id, at, title, folderId, content from files where id = id");
+            if (fileData == null) throw new Exception("File not found");
+            return toCodeFile(fileData);
         }
 
         private CodeFile toCodeFile(CodeFileData data)

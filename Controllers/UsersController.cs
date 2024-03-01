@@ -40,5 +40,19 @@ namespace Happy_Devs_BE.Controller
                 token = await _usersAuthenticationService.login(loginData.email, loginData.password)
             };
         }
+
+        [HttpGet("auth")]
+        public async Task<bool> auth()
+        {
+            try
+            {
+                await _usersAuthenticationService.authenticateUser(Request.Headers);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
